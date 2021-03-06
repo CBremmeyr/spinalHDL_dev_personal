@@ -1,0 +1,49 @@
+#!/usr/bin/sh
+
+help() {
+    printf "Useage:\n"
+    printf "\tnew <project_name>\n"
+    printf "\tinit\n"
+}
+
+gen_build_sbt() {
+        curl https://raw.githubusercontent.com/SpinalHDL/SpinalTemplateSbt/master/build.sbt > build.sbt
+}
+
+init_prj() {
+        gen_build_sbt
+        mkdir src
+        mkdir src/main
+        mkdir src/main/scala
+        mkdir src/test
+        mkdir src/test/scala
+        git init
+}
+
+if [ $# -lt 1 ]; then
+    help
+    exit 0
+fi
+
+case $1 in
+    "new")
+        if [ $# -ne 2 ]; then
+            echo "Need project name"
+            exit 1
+        fi
+        mkdir $2
+        cd $2
+        init_prj
+        ;;
+
+    "init")
+        init_prj
+        ;;
+    *)
+        echo "Cmd not reconized"
+        exit 1
+        ;;
+esac
+
+exit 0
+
